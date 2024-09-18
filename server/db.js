@@ -26,3 +26,64 @@ const createTables = async()=> {
     `;
     await client.query(SQL);
   };
+
+const createCustomer = async({ name })=> {
+    const SQL = `
+      INSERT INTO users(id, name) VALUES($1, $2) RETURNING *
+    `;
+    const response = await client.query(SQL, [uuid.v4(), name]);
+    return response.rows[0];
+    }
+
+const createRestaurant = async({ name })=> {
+        const SQL = `
+          INSERT INTO restautant(id, name) VALUES($1, $2) RETURNING *
+        `;
+        const response = await client.query(SQL, [uuid.v4(), name]);
+        return response.rows[0];
+      }
+
+const fetchCustomer = async()=> {
+        const SQL = `
+          SELECT * FROM customer;
+        `;
+        const response = await client.query(SQL);
+        return response.rows;
+      }
+      
+const fetchRestaurant = async()=> {
+        const SQL = `
+          SELECT * FROM restaurant;
+        `;
+        const response = await client.query(SQL);
+        return response.rows;
+      }
+
+const createReservation = async({ customer_id, restaurant_id, date, party_count })=> {
+        const SQL = `
+          INSERT INTO user_skills(id, customer_id, restaurant_id, date, party_count) VALUES($1, $2, $3, $4, $5) RETURNING *
+        `;
+        const response = await client.query(SQL, [uuid.v4(), user_id, skill_id, date, party_count]);
+        return response.rows[0];
+      }
+
+      const destroyReservation = async({id, customer_id})=> {
+        const SQL = `
+          DELETE FROM reservation
+          WHERE id = $1 AND customer_id = $2
+        `;
+        await client.query(SQL, [ id, customer_id ]);
+      }
+
+
+
+  module.exports = {
+    client,
+    createTables,
+    createCustomer,
+    createRestaurant,
+    fetchCustomer,
+    fetchRestaurant,
+    createReservation,
+    destroyReservation
+  };
