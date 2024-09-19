@@ -1,7 +1,10 @@
 const pg = require("pg");
 const client = new pg.Client(
-  process.env.DATABASE_URL || "postgres://localhost/acme_talent_agency_db"
+  process.env.DATABASE_URL || "postgres://localhost/reservation"
 );
+client.connect();
+console.log('Connected');
+
 const uuid = require("uuid");
 const bcrypt = require("bcrypt");
 
@@ -27,6 +30,7 @@ const createTables = async () => {
       );
     `;
   await client.query(SQL);
+  console.log('Tables Created');
 };
 
 const createCustomer = async ({ name }) => {
@@ -110,3 +114,4 @@ module.exports = {
   createReservation,
   destroyReservation,
 };
+ 
